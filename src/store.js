@@ -83,6 +83,34 @@ class Store {
       })
     });
   }
+
+  addItem(item) {
+    if (!this.state.cartItems.find(cartItem => cartItem.item.code == item.code)) {
+      const cartCode = Math.max(0, ...this.state.cartItems.map(cartItem => cartItem.cartCode)) + 1;
+      this.setState({
+        items: this.state.items,
+        cartItems: this.state.cartItems.concat({
+          cartCode,
+          item,
+          amount: 1,
+        }),
+      });
+    } else {
+      this.setState({
+        items: this.state.items,
+        cartItems: this.state.cartItems.map(cartItem => {
+          if (cartItem.item.code === item.code){
+            return {
+              cartCode: cartItem.cartCode,
+              item: cartItem.item,
+              amount: cartItem.amount + 1,
+            };
+          }
+          return cartItem;
+        }),
+      });
+    }
+  }
 }
 
 export default Store;
